@@ -1,0 +1,45 @@
+---
+import Layout from "./Layout.astro";
+import { getTagColor } from "../lib/tag-colors";
+
+export interface Props {
+  title: string;
+  date: Date;
+  tags: string[];
+}
+
+const { title, date, tags } = Astro.props;
+---
+
+<Layout title={`${title} — Emirhan`}>
+  <main class="min-h-screen bg-black text-white font-mono">
+    <div class="max-w-xl mx-auto px-6 py-20">
+      <a href="/blog" class="text-sm text-gray-500 hover:text-gray-300 transition-colors">
+        ← blog
+      </a>
+      <h1 class="text-3xl font-bold mt-6 mb-2">{title}</h1>
+      <p class="text-sm text-gray-500 mb-4">
+        {date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })}
+      </p>
+      {tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-12 -ml-2.5">
+          {tags.map((tag) => (
+            <a
+              href={`/blog/tag/${tag}`}
+              class:list={["text-xs px-2.5 py-1 rounded-full transition-colors", getTagColor(tag)]}
+            >
+              #{tag}
+            </a>
+          ))}
+        </div>
+      )}
+      <article class="prose prose-invert prose-sm max-w-none [&_*]:font-mono prose-p:text-gray-300 prose-headings:text-white prose-a:text-white prose-a:underline prose-strong:text-white prose-code:text-gray-300">
+        <slot />
+      </article>
+    </div>
+  </main>
+</Layout>
